@@ -78,6 +78,7 @@ mappings:
 |------|------|------|
 | `id` | 是 | 标签唯一ID |
 | `name` | 是 | 标签类型名称 |
+| `description` | 否 | 标签描述，用于 AI 理解标签含义 |
 | `condition` | 否 | 前置条件，所有 items 共享 |
 | `value` | 否 | 单一值（单值模式）或默认值（items模式） |
 | `items` | 否 | 映射项数组（多值模式） |
@@ -515,3 +516,72 @@ WHERE ...
 - **默认值支持**：简化兜底逻辑
 - **AI友好**：结构清晰，易于AI理解和使用
 - **YAML简洁**：字符串可省略引号
+
+## 13. 扩展标签配置
+
+扩展标签用于定义额外的查询标签，通过 `extensions/` 目录下的 YAML 文件配置。
+
+### 13.1 文件结构
+
+```
+extensions/
+├── category.yaml      # 分类标签
+├── tag.yaml           # 标签
+└── ...
+```
+
+### 13.2 扩展标签格式
+
+```yaml
+# extensions/category.yaml
+- id: category              # 标签ID
+  name: 分类                 # 标签名称
+  description: 商品分类，用于区分不同类型的商品  # 描述，用于AI理解
+  items:
+    - condition: p.type & 0x1 = 1
+      value: 食品
+    - condition: p.type & 0x2 = 2
+      value: 服装
+    # ...
+```
+
+### 13.3 简化格式（传给 AI）
+
+扩展标签传给 AI 时，采用简化格式以节省 token：
+
+```
+id: category
+name: 分类
+description: 商品分类，用于区分不同类型的商品
+values: [食品, 服装, 电子产品, 家居用品, ...]
+
+id: tag
+name: 标签
+description: 商品标签
+values: [热门, 新品, 促销, 限时, ...]
+```
+
+**说明**：
+- 只传递 `id`、`name`、`description`、`values`
+- 不传递 `condition`（AI 不需要理解底层 SQL 逻辑）
+- `values` 来自配置中的 `value` 字段
+
+### 13.4 AI 返回格式
+
+AI 返回扩展标签时使用以下格式：
+
+```json
+{
+  "sql": "SELECT ...",
+  "explanation": "...",
+  "extensions": [
+    {"id": "category", "values": ["食品", "电子产品"]},
+    {"id": "tag", "values": ["热门"]}
+  ]
+}
+```
+
+**说明**：
+- `extensions` 是额外标签查询，不是 SQL 的组成部分
+- `id` 对应扩展标签配置的 ID
+- `values` 用于在扩展配置中查找对应的 `condition` 生成额外查询
