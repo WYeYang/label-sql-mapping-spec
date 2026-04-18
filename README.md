@@ -19,4 +19,3 @@ Label-SQL Mapping (LSM) 是一种用于定义标签与 SQL 查询条件之间映
 ## 相关项目
 
 - [label-sql-mapping-sdk](https://github.com/WYeYang/label-sql-mapping-sdk) - LSM SDK 和 CLI 工具
-- [lsm-ygopro-database](https://github.com/WYeYang/lsm-ygopro-database) - YGOPRO 数据库配置
