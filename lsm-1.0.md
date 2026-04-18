@@ -534,15 +534,15 @@ extensions/
 
 ```yaml
 # extensions/category.yaml
-- id: category              # 标签ID
-  name: 分类                 # 标签名称
-  description: 商品分类，用于区分不同类型的商品  # 描述，用于AI理解
-  items:
-    - condition: p.type & 0x1 = 1
-      value: 食品
-    - condition: p.type & 0x2 = 2
-      value: 服装
-    # ...
+id: category                    # 标签ID
+name: 分类                       # 标签名称
+description: 商品分类，用于区分不同类型的商品  # 描述，用于AI理解
+items:
+  - condition: p.type & 0x1 = 1
+    value: 食品
+  - condition: p.type & 0x2 = 2
+    value: 服装
+  # ...
 ```
 
 ### 13.3 简化格式（传给 AI）
