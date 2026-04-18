@@ -99,12 +99,13 @@ mappings:
 ```yaml
 - id: title            # 标签ID，程序中引用
   name: 标题            # 标签名称，用于展示
+  condition: o.status != 0  # 前置条件（可选）
   value: p.title        # 字段引用，直接输出 p.title 字段的值
 ```
 
 → SQL：
 ```sql
-p.title AS title
+CASE WHEN o.status != 0 THEN p.title END AS title
 ```
 
 → 返回数据示例：
