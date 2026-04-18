@@ -79,15 +79,15 @@ mappings:
 | `id` | 是 | 标签唯一ID |
 | `name` | 是 | 标签类型名称 |
 | `description` | 否 | 标签描述，用于 AI 理解标签含义 |
-| `condition` | 否 | 前置条件，所有 items 共享 |
-| `value` | 否 | 单一值（单值模式）或默认值（items模式） |
-| `items` | 否 | 映射项数组（多值模式） |
+| `condition` | 条件性 | 单值模式时必须；items 模式时可选，作为所有 items 的前置条件 |
+| `value` | 条件性 | 单值模式时必须（字段引用）；items 模式时可选（作为默认值） |
+| `items` | 条件性 | items 模式时必须（映射项数组）；单值模式时不存在 |
 
 ### 4.3 MappingItem（映射项）
 
 | 字段 | 必填 | 说明 |
 |------|------|------|
-| `condition` | 否 | 匹配条件 |
+| `condition` | 是 | 匹配条件 |
 | `value` | 是 | 字段引用或展示值 |
 
 ## 5. 模式详解
@@ -99,7 +99,7 @@ mappings:
 ```yaml
 - id: title            # 标签ID，程序中引用
   name: 标题            # 标签名称，用于展示
-  condition: o.status != 0  # 前置条件（可选）
+  condition: o.status != 0  # 前置条件（单值模式时必须）
   value: p.title        # 字段引用，直接输出 p.title 字段的值
 ```
 
@@ -145,6 +145,7 @@ CASE WHEN p.type = 1 THEN p.price END AS price
 ```yaml
 - id: category         # 标签ID
   name: 类别            # 标签名称
+  condition: o.type > 0  # 前置条件（必须）
   items:                # 映射项数组
     - condition: c.type = 1  # 条件1
       value: 食品           # 满足条件1时输出
@@ -157,9 +158,9 @@ CASE WHEN p.type = 1 THEN p.price END AS price
 → SQL：
 ```sql
 CASE 
-  WHEN c.type = 1 THEN '食品'
-  WHEN c.type = 2 THEN '服装'
-  WHEN c.type = 3 THEN '电子'
+  WHEN o.type > 0 AND c.type = 1 THEN '食品'
+  WHEN o.type > 0 AND c.type = 2 THEN '服装'
+  WHEN o.type > 0 AND c.type = 3 THEN '电子'
 END AS category
 ```
 
