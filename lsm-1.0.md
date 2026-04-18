@@ -104,7 +104,7 @@ mappings:
 
 → SQL：
 ```sql
-CASE WHEN 1=1 THEN p.title END AS title
+p.title AS title
 ```
 
 → 返回数据示例：
