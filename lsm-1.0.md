@@ -82,6 +82,7 @@ mappings:
 | `condition` | 条件性 | 单值模式时必须；items 模式时可选，作为所有 items 的前置条件 |
 | `value` | 条件性 | 单值模式时必须（字段引用）；items 模式时可选（作为默认值） |
 | `items` | 条件性 | items 模式时必须（映射项数组）；单值模式时不存在 |
+| `range` | 否 | 数值范围约束（有 range 时表示为数值类型），如 `{ min: 0, max: 5000 }` |
 
 ### 4.3 MappingItem（映射项）
 
