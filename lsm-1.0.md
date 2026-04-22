@@ -72,6 +72,24 @@ mappings:
 | `database` | 是 | 数据库配置 |
 | `mappings` | 是 | 标签映射集合 |
 
+### 4.1.1 数据库路径配置
+
+数据库路径在 `lsm-sdk-js.yaml` 中配置：
+
+```yaml
+# lsm-sdk-js.yaml
+llm:
+  apiKey: ...
+  apiUrl: ...
+databasePath: ./lsm-ygopro-database/cards.cdb  # 数据库文件路径
+```
+
+| 字段 | 必填 | 说明 |
+|------|------|------|
+| `databasePath` | 是 | 数据库文件路径，支持相对路径或绝对路径 |
+
+**注意**：`labels.yaml` 中的 `database.path` 字段已废弃，不再使用。
+
 ### 4.2 LabelMapping（标签映射）
 
 | 字段 | 必填 | 说明 |
